@@ -31,8 +31,8 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
         while (count < (NUM_OF_ARTISTS - SLUG_TAG)):
             song_dict[count] = ast.literal_eval(
                               ( cleanhtml(str(SONGS[count])).replace(
-                                'Song:', '[ "') 
-                                + "',' " 
+                                'Song:', "[ ").replace("'","") 
+                                + '"," ' 
 
                                 + cleanhtml(str(ARTISTS[a_count])).replace("'","") 
 
@@ -79,24 +79,22 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
     else:
         count = 0
         while (count < NUM_OF_ARTISTS):
-            song_dict[count] = ast.literal_eval(
-                              ( cleanhtml(str(SONGS[count])).replace(
-                                'Song:', "[ '") 
+            song_dict[count] = ast.literal_eval((cleanhtml(str(SONGS[count])).replace("'","").replace('Song:', "[ '") 
                                 + "',' " 
 
-                                + cleanhtml(str(ARTISTS[count]).replace("'","") 
+                                + cleanhtml(str(ARTISTS[count])).replace("'","") 
 
                                 + "',' " 
 
                                 + cleanhtml(str(ALBUMS[count]).replace(
                                   'from', '')
-                                + "' ]"))))   
+                                + "' ]")))    
             count = count + 1
     
     #arr = ast.literal_eval(song_dict[0])
     #print(len(arr))
     #print("\n")
-    #print(len(song_dict[0]))
+    print(len(song_dict[0]))
     for song in song_dict:
         print(song_dict[song])
         print("\n")
