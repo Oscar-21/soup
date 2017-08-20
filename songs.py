@@ -1,3 +1,4 @@
+import ast
 import clean
 from clean import cleanhtml
 import pika
@@ -24,19 +25,23 @@ with open('index.html', 'r') as html_doc:
 
     count = 0
     while (count < NUM_OF_ARTISTS):
-        song_dict[count] = ( cleanhtml(str(SONGS[count])).replace('Song:', '[ ')                             + ', ' + ' artist ' + str(count) + ' ' 
+        song_dict[count] = ( cleanhtml(str(SONGS[count])).replace(
+                            'Song:', "[ '") 
+                            + "',' " 
 
                             + cleanhtml(str(ARTISTS[count])) 
 
-                            + ' album ' + str(count) + ' ' 
+                            + "',' " 
 
-                            + cleanhtml(str(ALBUMS[count])))    
+                            + cleanhtml(str(ALBUMS[count]).replace(
+                              'from', '')
+                            + "' ]"))    
         count = count + 1
     
     
-    lengths = len(song_dict[0])
-    print(song_dict)
-    print("\n")
+    arr = ast.literal_eval(song_dict[0])
+    print(len(arr))
+    #print("\n")
     #for song in song_dict:
     #    print(song_dict[song])
     #    print("\n")
