@@ -8,7 +8,7 @@ import urllib.request
 SLUG = "['internallink__slug']"
 
 #with open('index.html', 'r') as html_doc:
-with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2016/12/27/506149952/vikings-choice-the-year-in-the-loud-and-the-weird')as site:
+with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2015/12/02/458038833/all-songs-considered-the-year-in-music-2015')as site:
 
     
     html_doc = site.read().decode('utf-8');
@@ -18,7 +18,9 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2016/12/27/506
     DOC = BeautifulSoup(html_doc, 'html.parser')
 
     ARTISTS = DOC.find_all('h4')
+    print(ARTISTS)
     SONGS = DOC.find_all('li', class_ = 'song');
+    print(SONGS)
     ALBUMS = DOC.find_all('li', class_ = 'album');
     print(len(ALBUMS))
 
@@ -50,8 +52,10 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2016/12/27/506
         count = 0
         while (count < NUM_OF_ARTISTS):
             song_dict[count] = ast.literal_eval(
-                              ( cleanhtml(str(SONGS[count])).replace("'","").replace(
-                                'Song:', "[ '") 
+                              ( cleanhtml(str(SONGS[count])
+                              ).replace("'",""
+                              ).replace('Song:', "[ '") 
+                                
                                 + "',' " 
 
                                 + cleanhtml(str(ARTISTS[count+1])
@@ -61,6 +65,7 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2016/12/27/506
 
                                 + cleanhtml(str(ALBUMS[count]).replace(
                                   'from', "").replace("'","")
+                                  
                                 + "' ]"))) 
 
             count = count + 1
