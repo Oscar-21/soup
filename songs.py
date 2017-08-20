@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 
 #with open('index.html', 'r') as html_doc:
-with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/20/533635916/new-mix-lorde-zola-jesus-chelsea-wolfe-more')as site:
+with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/27/534534646/your-favorite-new-artists-of-2017-so-far')as site:
 
     
     html_doc = site.read().decode('utf-8');
@@ -15,7 +15,6 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/20/533
     
     DOC = BeautifulSoup(html_doc, 'html.parser')
 
-    #ARTISTS = DOC.find('h4', {'class': 'clearfix'})
     ARTISTS = DOC.find_all('h4')
     SONGS = DOC.find_all('li', class_ = 'song');
     ALBUMS = DOC.find_all('li', class_ = 'album');
@@ -26,7 +25,8 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/20/533
         SLUG_TAG = 1
         count = 0
         while (count < (NUM_OF_ARTISTS - SLUG_TAG)):
-            song_dict[count] = ( cleanhtml(str(SONGS[count])).replace(
+            song_dict[count] = ast.literal_eval(
+                              ( cleanhtml(str(SONGS[count])).replace(
                                 'Song:', "[ '") 
                                 + "',' " 
 
@@ -36,22 +36,24 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/20/533
 
                                 + cleanhtml(str(ALBUMS[count]).replace(
                                   'from', '')
-                                + "' ]"))    
+                                + "' ]")))   
             count = count + 1
     else:
         count = 0
         while (count < NUM_OF_ARTISTS):
-            song_dict[count] = ( cleanhtml(str(SONGS[count])).replace(
+            song_dict[count] = ast.literal_eval(
+                              ( cleanhtml(str(SONGS[count])).replace(
                                 'Song:', "[ '") 
                                 + "',' " 
 
-                                + cleanhtml(str(ARTISTS[count])) 
+                                + cleanhtml(str(ARTISTS[count])
+                                  ).replace("'", "") 
 
                                 + "',' " 
 
                                 + cleanhtml(str(ALBUMS[count]).replace(
-                                  'from', '')
-                                + "' ]"))    
+                                  'from', "").replace("'","")
+                                + "' ]"))) 
 
             count = count + 1
     
