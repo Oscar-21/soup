@@ -31,7 +31,7 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
         while (count < (NUM_OF_ARTISTS - SLUG_TAG)):
             song_dict[count] = ast.literal_eval(
                               ( cleanhtml(str(SONGS[count])).replace(
-                                'Song:', "[ '") 
+                                'Song:', '[ "') 
                                 + "',' " 
 
                                 + cleanhtml(str(ARTISTS[a_count])).replace("'","") 
@@ -40,7 +40,7 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
 
                                 + cleanhtml(str(ALBUMS[count]).replace(
                                   'from', '')
-                                + "' ]")))   
+                                + '" ]')))   
             count = count + 1
 
     elif ARTISTS[0].attrs and str(ARTISTS[0].attrs['class']) == SLUG:
@@ -81,7 +81,7 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
         while (count < NUM_OF_ARTISTS):
             song_dict[count] = ast.literal_eval(
                               ( cleanhtml(str(SONGS[count])).replace(
-                                'Song:', "[ '").replace("'", "") 
+                                'Song:', "[ '") 
                                 + "',' " 
 
                                 + cleanhtml(str(ARTISTS[count]).replace("'","") 
