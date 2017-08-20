@@ -5,8 +5,10 @@ import pika
 from bs4 import BeautifulSoup
 import urllib.request
 
+SLUG = "['internallink__slug']"
+
 #with open('index.html', 'r') as html_doc:
-with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/27/534534646/your-favorite-new-artists-of-2017-so-far')as site:
+with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-carrie-brownstein-and-fred-armisen')as site:
 
     
     html_doc = site.read().decode('utf-8');
@@ -19,18 +21,20 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/27/534
     SONGS = DOC.find_all('li', class_ = 'song');
     ALBUMS = DOC.find_all('li', class_ = 'album');
 
-    NUM_OF_ARTISTS = len(ALBUMS)
+    NUM_OF_ARTISTS = len(SONGS)
+    NUM_OF_ALBUMS = len(ALBUMS)
 
     if NUM_OF_ARTISTS > len(SONGS):
         SLUG_TAG = 1
         count = 0
+        a_count = 1
         while (count < (NUM_OF_ARTISTS - SLUG_TAG)):
             song_dict[count] = ast.literal_eval(
                               ( cleanhtml(str(SONGS[count])).replace(
                                 'Song:', "[ '") 
                                 + "',' " 
 
-                                + cleanhtml(str(ARTISTS[count + SLUG_TAG])) 
+                                + cleanhtml(str(ARTISTS[a_count])).replace("'","") 
 
                                 + "',' " 
 
@@ -38,7 +42,27 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/27/534
                                   'from', '')
                                 + "' ]")))   
             count = count + 1
-    else:
+
+    elif ARTISTS[0].attrs and str(ARTISTS[0].attrs['class']) == SLUG:
+        count = 0
+        while (count < NUM_OF_ARTISTS):
+            song_dict[count] = ast.literal_eval(
+                              ( cleanhtml(str(SONGS[count])).replace(
+                                'Song:', "[ '") 
+                                + "',' " 
+
+                                + cleanhtml(str(ARTISTS[count+1])
+                                  ).replace("'", "") 
+
+                                + "',' " 
+
+                                + cleanhtml(str(ALBUMS[count]).replace(
+                                  'from', "").replace("'","")
+                                + "' ]"))) 
+
+            count = count + 1
+
+    elif NUM_OF_ARTISTS > NUM_OF_ALBUMS:
         count = 0
         while (count < NUM_OF_ARTISTS):
             song_dict[count] = ast.literal_eval(
@@ -49,19 +73,30 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/06/27/534
                                 + cleanhtml(str(ARTISTS[count])
                                   ).replace("'", "") 
 
+                                + "' ]"))
+            count = count + 1
+
+    else:
+        count = 0
+        while (count < NUM_OF_ARTISTS):
+            song_dict[count] = ast.literal_eval(
+                              ( cleanhtml(str(SONGS[count])).replace(
+                                'Song:', "[ '").replace("'", "") 
+                                + "',' " 
+
+                                + cleanhtml(str(ARTISTS[count]).replace("'","") 
+
                                 + "',' " 
 
                                 + cleanhtml(str(ALBUMS[count]).replace(
-                                  'from', "").replace("'","")
-                                + "' ]"))) 
-
+                                  'from', '')
+                                + "' ]"))))   
             count = count + 1
-    
     
     #arr = ast.literal_eval(song_dict[0])
     #print(len(arr))
     #print("\n")
-    print(len(song_dict[0]))
+    #print(len(song_dict[0]))
     for song in song_dict:
         print(song_dict[song])
         print("\n")
