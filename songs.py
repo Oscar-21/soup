@@ -25,7 +25,7 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
     count = 0
     while (count < NUM_OF_ARTISTS):
         #artist_dict["artist{0}".format(count)] = cleanhtml(str(ARTISTS[count])) + ' ' + str(count) + 'artist'
-        song_dict["song{0} ".format(count)] = cleanhtml(str(SONGS[count])) + ' artist' + str(count) + ' ' + cleanhtml(str(ARTISTS[count])) + 'album ' + str(count) + ' ' + cleanhtml(str(ALBUMS[count]))    
+        song_dict[" song{0} ".format(count)] = cleanhtml(str(SONGS[count])) + ' artist ' + str(count) + ' ' + cleanhtml(str(ARTISTS[count])) + ' album ' + str(count) + ' ' + cleanhtml(str(ALBUMS[count]))    
         #album_dict["album{0}".format(count)] = cleanhtml(str(ALBUMS[count]))  + ' ' + str(count) + 'album'         
         count = count + 1
     
