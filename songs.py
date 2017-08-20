@@ -5,23 +5,23 @@ import pika
 from bs4 import BeautifulSoup
 import urllib.request
 
-with open('index.html', 'r') as html_doc:
-#with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-carrie-brownstein-and-fred-armisen') as site:
-    
+#with open('index.html', 'r') as html_doc:
+with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2017/07/25/539040621/newport-folk-2017-preview-drive-by-truckers-jim-james-john-prine-and-more')as site:
 
-    #artist_dict = {}
+    
+    html_doc = site.read().decode('utf-8');
+
     song_dict = {}
-    #album_dict = {}
     
     DOC = BeautifulSoup(html_doc, 'html.parser')
 
+    #ARTISTS = DOC.find('h4', {'class': 'clearfix'})
     ARTISTS = DOC.find_all('h4')
     SONGS = DOC.find_all('li', class_ = 'song');
     ALBUMS = DOC.find_all('li', class_ = 'album');
+    print(ALBUMS)
 
-            
-
-    NUM_OF_ARTISTS = len(ARTISTS)
+    NUM_OF_ARTISTS = len(ALBUMS)
 
     count = 0
     while (count < NUM_OF_ARTISTS):
@@ -29,7 +29,7 @@ with open('index.html', 'r') as html_doc:
                             'Song:', "[ '") 
                             + "',' " 
 
-                            + cleanhtml(str(ARTISTS[count])) 
+                            + cleanhtml(str(ARTISTS[count + 1])) 
 
                             + "',' " 
 
@@ -39,12 +39,12 @@ with open('index.html', 'r') as html_doc:
         count = count + 1
     
     
-    arr = ast.literal_eval(song_dict[0])
-    print(len(arr))
+    #arr = ast.literal_eval(song_dict[0])
+    #print(len(arr))
     #print("\n")
-    #for song in song_dict:
-    #    print(song_dict[song])
-    #    print("\n")
+    for song in song_dict:
+        print(song_dict[song])
+        print("\n")
     
     #connection = pika.BlockingConnection(pika.ConnectionParameters(
     #        host='localhost'))
