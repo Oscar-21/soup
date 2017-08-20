@@ -29,22 +29,32 @@ with urllib.request.urlopen('http://www.npr.org/2017/08/18/148297699/guest-djs-c
         album_dict["album{0}".format(count)] = cleanhtml(str(ALBUMS[count])) + ', '
         count = count + 1
 
-    join_dict = '[ ' + str(artist_dict) + ' ],' + '[ ' + str(song_dict) + ' ],' + '[ ' + str(album_dict) + ' ]'
-        
-    foo = eval(join_dict)
-    length = len(foo)
+    join_dict = artist_dict.copy()
+    join_dict.update(song_dict)
+    join_dict.update(album_dict)
 
-    count = 0
-    while (count < length):
+    ARITSTS_SONGS_ALBUMS = join_dict.copy()
+
+    for song in ARITSTS_SONGS_ALBUMS:
+        print(ARITSTS_SONGS_ALBUMS[song])
+    #join_dict = artist_dict + song_dict + album_dict 
+        
+    #foo = eval(join_dict)
+    #length = len(join_dict)
+    #print(length)
+    #length = len(foo)
+
+    #count = 0
+    #while (count < length):
         #songs = len(foo[count])
         #songs_iter = 0
         #while (songs_iter < songs):
         #    print(foo[count][songs_iter])
         #    print("\n")
         #    songs_iter = songs_iter + 1
-        print(foo[count])
-        print("\n")
-        count = count + 1
+    #    print(foo[count])
+    #    print("\n")
+    #    count = count + 1
     
     #connection = pika.BlockingConnection(pika.ConnectionParameters(
     #        host='localhost'))
