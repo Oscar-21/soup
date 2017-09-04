@@ -17,11 +17,14 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2015/12/02/458
     
     DOC = BeautifulSoup(html_doc, 'html.parser')
 
-    ARTISTS = DOC.find_all('h4')
-    print(ARTISTS)
-    SONGS = DOC.find_all('li', class_ = 'song');
-    print(SONGS)
-    ALBUMS = DOC.find_all('li', class_ = 'album');
+    if DOC.find_all('li', class_ = 'artist') == []:
+        ARTISTS = DOC.find_all('h4')
+        SONGS = DOC.find_all('li', class_ = 'song');
+        ALBUMS = DOC.find_all('li', class_ = 'album');
+    elif DOC.find_all('li', class_ = 'artist') != []:
+        SONGS = DOC.find_all('h4')
+        ARTISTS = DOC.find_all('li', class_ = 'artist');
+        ALBUMS = DOC.find_all('li', class_ = 'album');
     print(len(ALBUMS))
 
     NUM_OF_ARTISTS = len(SONGS)
@@ -85,7 +88,7 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2015/12/02/458
                                 + "' ]"))
             count = count + 1
 
-    else:
+    if DOC.find_all('li', class_ = 'artist') == []:
         print('four')
         count = 0
         while (count < NUM_OF_ARTISTS):
@@ -101,7 +104,27 @@ with urllib.request.urlopen('http://www.npr.org/sections/allsongs/2015/12/02/458
                                 + "' ]")))    
             count = count + 1
     
-    
+        
+    elif DOC.find_all('li', class_ = 'artist') != []:
+        print('five')
+        count = 0
+        while (count < NUM_OF_ARTISTS):
+            song_dict[count] = ast.literal_eval(( "['" + cleanhtml(str(SONGS[count])).replace("'","") 
+                                + "',' " 
+
+                                + cleanhtml(str(ARTISTS[count])).replace("'","") 
+
+                                + "',' " 
+
+                                + cleanhtml(str(ALBUMS[count]).replace(
+                                  'from', '')
+                                + "' ]")))    
+            count = count + 1
+
+    for index in song_dict:
+      print(song_dict[index]);
+      print("\n")
+
     connection = pika.BlockingConnection(pika.ConnectionParameters(
             host='localhost'))
     channel = connection.channel()
